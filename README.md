@@ -6,8 +6,15 @@
 - ext-json
 - ext-curl
 
+## 安装 
+
+```composer
+composer require alapi/php-sdk
+```
+
 
 ## 使用
+
 
 ```php
 
