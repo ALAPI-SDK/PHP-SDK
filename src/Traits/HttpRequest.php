@@ -117,6 +117,10 @@ trait HttpRequest
     public function request(): Result
     {
         $client = $this->createHttpClient();
+        if(!$this->api){
+            throw new ALAPIException('api cannot be empty');
+        }
+
         $options = [];
         if ('get' == $this->method) {
             $options['query'] = $this->param;
