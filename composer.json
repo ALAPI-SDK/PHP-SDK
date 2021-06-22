@@ -19,7 +19,7 @@
   ],
   "require": {
     "ext-json": "*",
-    "php": "^7.2",
+    "php": ">=7.2",
     "guzzlehttp/guzzle": "^7.3"
   },
   "autoload": {
@@ -27,7 +27,13 @@
       "ALAPI\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "ALAPI\\Tests\\": "tests"
+    }
+  },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^3.0"
+    "friendsofphp/php-cs-fixer": "^3.0",
+    "phpunit/phpunit": "^7.5"
   }
 }
