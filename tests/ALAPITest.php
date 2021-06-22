@@ -18,26 +18,26 @@ class ALAPITest extends TestCase
 {
     public function testAlapi()
     {
-        $client = new Client('token');
+        $client = new Client(getenv('TOKEN'));
 
         try {
             $result = $client->setApi('/api/hitokoto')
                 ->setParam('type', 'a')
                 ->request();
-            Assert::assertEquals(100, $result->getCode());
+            Assert::assertEquals(200, $result->getCode());
         } catch (ALAPIException $e) {
         }
     }
 
     public function testUpload()
     {
-        $client = new Client('token');
+        $client = new Client(getenv('token'));
         try {
             $result = $client->setApi('/api/image')
                 ->setParam('image', 'tests/img.png', true)
                 ->setParam('type', 'alapi')
                 ->request();
-            Assert::assertEquals(100, $result->getCode());
+            Assert::assertEquals(200, $result->getCode());
         } catch (ALAPIException $e) {
         }
     }
