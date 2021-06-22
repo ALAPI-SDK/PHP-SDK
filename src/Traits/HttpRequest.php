@@ -14,6 +14,7 @@ use ALAPI\Model\Result;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Utils;
 
 trait HttpRequest
 {
@@ -28,6 +29,8 @@ trait HttpRequest
     protected $method = 'post';
 
     protected $param = [];
+
+    protected $fileParam = [];
 
     protected $throw = false;
 
@@ -68,18 +71,9 @@ trait HttpRequest
      *
      * @return HttpRequest
      */
-    public function setParam(string $name, $value)
+    public function setParam(string $name, $value, bool $is_file = false)
     {
-        $this->param[$name] = $value;
-
-        return $this;
-    }
-
-    public function setParams(array $param)
-    {
-        $params = array_merge($param, $this->param);
-
-        $this->param = $params;
+        $this->param[] = ['name' => $name, 'value' => $value, 'is_file' => $is_file];
 
         return $this;
     }
@@ -117,15 +111,29 @@ trait HttpRequest
     public function request(): Result
     {
         $client = $this->createHttpClient();
-        if(!$this->api){
-            throw new ALAPIException('api cannot be empty');
+        if (!$this->api) {
+            throw new ALAPIException('API 不能为空');
         }
 
+        $method = $this->method;
         $options = [];
-        if ('get' == $this->method) {
-            $options['query'] = $this->param;
+        if ('get' === $method) {
+            $query = [];
+            foreach ($this->param as $key => $item) {
+                $query[$item['name']] = $item['value'];
+            }
+            $options['query'] = $query;
         } else {
-            $options['form_params'] = $this->param;
+            $multipart = [];
+            foreach ($this->param as $key => $item) {
+                $multipart[$key]['name'] = $item['name'];
+                if ($item['is_file']) {
+                    $multipart[$key]['contents'] = Utils::tryFopen($item['value'], 'r');
+                } else {
+                    $multipart[$key]['contents'] = $item['value'];
+                }
+            }
+            $options['multipart'] = $multipart;
         }
 
         try {
