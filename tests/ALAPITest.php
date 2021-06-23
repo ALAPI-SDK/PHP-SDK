@@ -32,6 +32,7 @@ class ALAPITest extends TestCase
     public function testUpload()
     {
         $client = new Client(getenv('token'));
+
         try {
             $result = $client->setApi('/api/image')
                 ->setParam('image', 'tests/img.png', true)
