@@ -157,9 +157,9 @@ trait HttpRequest
     {
         return new Client([
             'base_uri' => $this->endpoint,
-            'handle' => $this->handleStack,
-            'headers' => [
-                'token' => $this->token,
+            'handle'   => $this->handleStack,
+            'headers'  => [
+                'token'      => $this->token,
                 'User-Agent' => 'ALAPI-PHP/1.0',
             ],
         ]);
